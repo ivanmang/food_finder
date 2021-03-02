@@ -3,12 +3,8 @@ package com.example.foodfinder.ui.discover
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,14 +19,14 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.material.snackbar.Snackbar
 
-class DiscoverFragment : Fragment(), OnMapReadyCallback {
+class DiscoverFragment() : Fragment(), OnMapReadyCallback {
 
     private lateinit var discoverViewModel: DiscoverViewModel
     private lateinit var map: GoogleMap
     private val ZOOM_LEVEL = 18f
     private val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 111
+
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -38,7 +34,7 @@ class DiscoverFragment : Fragment(), OnMapReadyCallback {
             savedInstanceState: Bundle?
     ): View? {
         discoverViewModel =
-                ViewModelProvider(this).get(DiscoverViewModel::class.java)
+                ViewModelProvider(this, DiscoverViewModelFactory( requireActivity().application )).get(DiscoverViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_discover, container, false)
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment

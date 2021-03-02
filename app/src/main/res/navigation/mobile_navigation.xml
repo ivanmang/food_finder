@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.foodfinder.ui.dashboard.DashboardFragment"
+        android:name="com.example.foodfinder.ui.dashboard.BrowseFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_browse" />
 
     <fragment
         android:id="@+id/navigation_notifications"
