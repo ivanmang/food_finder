@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.foodfinder.ui.dashboard.BrowseFragment"
+        android:name="com.example.foodfinder.ui.browse.BrowseFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_browse" />
 

@@ -1,4 +1,4 @@
-package com.example.foodfinder.ui.dashboard
+package com.example.foodfinder.ui.browse
 
 import android.app.Application
 import android.location.Location
@@ -9,29 +9,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodfinder.ApiResult
 import com.example.foodfinder.Constants
+import com.example.foodfinder.Place
 import com.example.foodfinder.database.getDatabase
 import com.example.foodfinder.network.PlacesApi
-import com.example.foodfinder.repository.PlacesRepository
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class BrowseViewModel(application: Application) : ViewModel() {
 
-    private val _result = MutableLiveData<ApiResult>()
 
-    val result : LiveData<ApiResult>
-        get() = _result
-
-
-    private val database = getDatabase(application)
+    private val _restaurantList = MutableLiveData<List<Place>>()
+    val restaurantList : LiveData<List<Place>>
+        get() = _restaurantList
 
     
     fun getNearbyRestaurant(location: Location){
         viewModelScope.launch {
             try {
-                _result.value = PlacesApi.retrofitService.getNearByLocation(locationToString(location), 1500, "restaurant", Constants.API_KEY )
-                Log.i("Result: ", _result.value.toString())
+                _restaurantList.value = PlacesApi.retrofitService.getNearByLocation(locationToString(location), 1500, "restaurant", Constants.API_KEY ).results
             } catch (e :Exception) {
+                _restaurantList.value = ArrayList()
                 Log.i("Error", e.toString())
             }
         }

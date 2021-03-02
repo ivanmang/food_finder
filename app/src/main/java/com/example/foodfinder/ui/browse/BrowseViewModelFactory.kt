@@ -1,4 +1,4 @@
-package com.example.foodfinder.ui.dashboard
+package com.example.foodfinder.ui.browse
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
