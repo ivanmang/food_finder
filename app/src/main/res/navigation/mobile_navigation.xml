@@ -12,14 +12,32 @@
         tools:layout="@layout/fragment_discover" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_browse"
         android:name="com.example.foodfinder.ui.browse.BrowseFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_browse" />
+        android:label="@string/title_browse"
+        tools:layout="@layout/fragment_browse" >
+
+        <action
+            android:id="@+id/action_navigation_browse_to_restaurantDetailFragment"
+            app:destination="@id/restaurantDetailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.foodfinder.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/restaurantDetailFragment"
+        android:name="com.example.foodfinder.ui.detail.RestaurantDetailFragment"
+        android:label="RestaurantDetailFragment">
+        <argument
+            android:name="selectedPlace"
+            app:argType="com.example.foodfinder.Place"
+            />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.foodfinder.MainActivity"
+        android:label="MainActivity" />
 </navigation>

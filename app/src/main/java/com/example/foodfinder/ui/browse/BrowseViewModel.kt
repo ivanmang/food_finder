@@ -23,6 +23,10 @@ class BrowseViewModel(application: Application) : ViewModel() {
 
     val restaurantList : LiveData<List<Place>> = database.placesDatabaseDao.getAllPlaces()
 
+    private val _navigateToSelectedProperty = MutableLiveData<Place>()
+
+    val navigateToSelectedProperty: LiveData<Place>
+        get() = _navigateToSelectedProperty
     
     fun getNearbyRestaurant(location: Location){
         viewModelScope.launch {
@@ -38,6 +42,14 @@ class BrowseViewModel(application: Application) : ViewModel() {
 
     private fun locationToString(location: Location) : String {
         return location.latitude.toString() + "," + location.longitude.toString()
+    }
+
+    fun displayPropertyDetails(place: Place) {
+        _navigateToSelectedProperty.value = place
+    }
+
+    fun displayPropertyDetailsComplete() {
+        _navigateToSelectedProperty.value = null
     }
 
     fun clearDatabase(){

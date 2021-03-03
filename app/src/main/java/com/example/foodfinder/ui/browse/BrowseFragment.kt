@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.foodfinder.R
 import com.example.foodfinder.databinding.FragmentBrowseBinding
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -46,7 +47,7 @@ class BrowseFragment : Fragment() {
         binding.lifecycleOwner = this
 
         binding.restaurantList.adapter = RestaurantListAdapter(RestaurantListAdapter.OnClickListener {
-            Log.i("Hi", "Clicked")
+            browseViewModel.displayPropertyDetails(it)
         })
 
         binding.currentLocationButton.setOnClickListener {
@@ -63,6 +64,15 @@ class BrowseFragment : Fragment() {
                 }
             }
         }
+
+        browseViewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
+            if ( null != it ) {
+                // Must find the NavController from the Fragment
+                this.findNavController().navigate(BrowseFragmentDirections.actionNavigationBrowseToRestaurantDetailFragment(it))
+                // Tell the ViewModel we've made the navigate call to prevent multiple navigation
+                browseViewModel.displayPropertyDetailsComplete()
+            }
+        })
 
 
         return binding.root
