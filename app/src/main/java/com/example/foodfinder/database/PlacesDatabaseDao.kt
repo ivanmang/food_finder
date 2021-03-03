@@ -14,7 +14,10 @@ interface PlacesDatabaseDao {
     suspend fun update(place : Place)
 
     @Query("SELECT * FROM place_table ORDER BY rating")
-    fun getAllPlaces(): List<Place>
+    fun getAllPlaces(): LiveData<List<Place>>
+
+    @Query("DELETE FROM place_table")
+    suspend fun deleteAll()
 }
 
 @Database(entities = [Place::class], version = 1, exportSchema = false)

@@ -12,23 +12,25 @@ import com.example.foodfinder.Constants
 import com.example.foodfinder.Place
 import com.example.foodfinder.database.getDatabase
 import com.example.foodfinder.network.PlacesApi
+import com.example.foodfinder.repository.PlacesRepository
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class BrowseViewModel(application: Application) : ViewModel() {
 
+    private val database = getDatabase(application)
+    private val restaurantRepository = PlacesRepository(database.placesDatabaseDao)
 
-    private val _restaurantList = MutableLiveData<List<Place>>()
-    val restaurantList : LiveData<List<Place>>
-        get() = _restaurantList
+    val restaurantList : LiveData<List<Place>> = database.placesDatabaseDao.getAllPlaces()
 
     
     fun getNearbyRestaurant(location: Location){
         viewModelScope.launch {
             try {
-                _restaurantList.value = PlacesApi.retrofitService.getNearByLocation(locationToString(location), 1500, "restaurant", Constants.API_KEY ).results
+                val response = PlacesApi.retrofitService.getNearByLocation(locationToString(location), 1500, "restaurant", Constants.API_KEY ).results
+                restaurantRepository.insertToDatabase(response)
+                Log.i("value", response.toString())
             } catch (e :Exception) {
-                _restaurantList.value = ArrayList()
                 Log.i("Error", e.toString())
             }
         }
@@ -36,6 +38,16 @@ class BrowseViewModel(application: Application) : ViewModel() {
 
     private fun locationToString(location: Location) : String {
         return location.latitude.toString() + "," + location.longitude.toString()
+    }
+
+    fun clearDatabase(){
+        viewModelScope.launch {
+            try {
+                restaurantRepository.clearDatabase()
+            } catch (e : Exception){
+                Log.i("Error", e.toString())
+            }
+        }
     }
 
 }

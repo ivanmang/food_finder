@@ -9,6 +9,6 @@ import com.squareup.moshi.Json
 data class Place(
     @PrimaryKey   val place_id: String,
                   val name : String,
-                  val rating : Double,
+                  val rating : String,
                   val vicinity : String
                   )

@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,6 +24,7 @@ class BrowseFragment : Fragment() {
 
     private lateinit var binding : FragmentBrowseBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var lastLocation : Location
 
     private val browseViewModel: BrowseViewModel by lazy {
         val activity = requireNotNull(this.activity) {
@@ -53,7 +55,8 @@ class BrowseFragment : Fragment() {
                 val locationResult = fusedLocationClient.lastLocation
                 locationResult.addOnCompleteListener { task ->
                     if (task.isSuccessful && task.result != null) {
-                        val lastLocation = task.result
+                        lastLocation = task.result
+                        browseViewModel.clearDatabase()
                         browseViewModel.getNearbyRestaurant(lastLocation)
                         Log.i("Restaurant :", "Success")
                     }
@@ -64,6 +67,8 @@ class BrowseFragment : Fragment() {
 
         return binding.root
     }
+
+
 
     private fun isForegroundLocationGranted(): Boolean {
         return PackageManager.PERMISSION_GRANTED ==
