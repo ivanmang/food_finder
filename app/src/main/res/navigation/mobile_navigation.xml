@@ -19,7 +19,10 @@
 
         <action
             android:id="@+id/action_navigation_browse_to_restaurantDetailFragment"
-            app:destination="@id/restaurantDetailFragment" />
+            app:destination="@id/restaurantDetailFragment"
+            app:launchSingleTop="false"
+            app:popUpTo="@id/navigation_browse"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment

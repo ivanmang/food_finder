@@ -68,7 +68,7 @@ class BrowseFragment : Fragment() {
         browseViewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
             if ( null != it ) {
                 // Must find the NavController from the Fragment
-                this.findNavController().navigate(BrowseFragmentDirections.actionNavigationBrowseToRestaurantDetailFragment(it))
+                this.findNavController().navigate( BrowseFragmentDirections.actionNavigationBrowseToRestaurantDetailFragment(it))
                 // Tell the ViewModel we've made the navigate call to prevent multiple navigation
                 browseViewModel.displayPropertyDetailsComplete()
             }
