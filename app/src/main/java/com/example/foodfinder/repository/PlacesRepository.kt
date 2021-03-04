@@ -21,13 +21,13 @@ private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : PlacesDataSour
         val response = PlacesApi.retrofitService.getNearByLocation(locationToString(location), 1500, "restaurant", Constants.API_KEY ).results
         insertToDatabase(response)
         placesRankByRating = database.getAllPlaces()
-        Log.i("place", placesRankByRating.value?.size.toString())
+        //Log.i("place", placesRankByRating.value?.size.toString())
     }
 
     suspend fun insertToDatabase(places : List<Place>){
         for(place in places){
             database.insert(place)
-            Log.i("Location", place.name)
+            //Log.i("Location", place.name)
         }
     }
 

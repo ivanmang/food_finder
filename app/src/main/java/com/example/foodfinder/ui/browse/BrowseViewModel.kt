@@ -33,7 +33,7 @@ class BrowseViewModel(application: Application) : ViewModel() {
             try {
                 val response = PlacesApi.retrofitService.getNearByLocation(locationToString(location), 1500, "restaurant", Constants.API_KEY ).results
                 restaurantRepository.insertToDatabase(response)
-                Log.i("value", response.toString())
+                //Log.i("value", response.toString())
             } catch (e :Exception) {
                 Log.i("Error", e.toString())
             }
