@@ -16,6 +16,8 @@ class RestaurantDetailFragment : Fragment() {
         val place = RestaurantDetailFragmentArgs.fromBundle(requireArguments()).selectedPlace
         val viewModelFactory = RestaurantViewModelFactory(place, application)
 
+        binding.imageList.adapter = ImageListAdapter()
+
         binding.viewModel = ViewModelProvider(this, viewModelFactory).get(RestaurantDetailViewModel::class.java)
 
         return binding.root

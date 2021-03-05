@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.foodfinder.Constants
+import com.example.foodfinder.ImageApiString
 import com.example.foodfinder.Place
 import com.example.foodfinder.PlaceDetail
 import com.example.foodfinder.network.PlacesApi
@@ -19,9 +20,11 @@ class RestaurantDetailViewModel(place: Place, application: Application) : Androi
     val placeDetail : LiveData<PlaceDetail>
         get() = _placeDetail
 
-    private val _photoApiLink = MutableLiveData<String>()
-    val photoApiLink : LiveData<String>
+    private val _photoApiLink = MutableLiveData<List<ImageApiString>>()
+    val photoApiLink : LiveData<List<ImageApiString>>
         get() = _photoApiLink
+
+    private val photoList = ArrayList<ImageApiString>()
 
     init {
         getPlaceDetail(place)
@@ -31,19 +34,21 @@ class RestaurantDetailViewModel(place: Place, application: Application) : Androi
         viewModelScope.launch {
             try {
                 _placeDetail.value = PlacesApi.retrofitService.getPlaceDetail(place.place_id, Constants.API_KEY).result
-                val photoRef =  _placeDetail.value!!.photos.get(0).photo_reference
-                _photoApiLink.value = buildPhotoAPI(photoRef)
+                for( photo in  placeDetail.value!!.photos){
+                    photoList.add(buildPhotoAPI(photo.photo_reference))
+                }
+                _photoApiLink.value = photoList.toList()
             } catch (e : Exception){
                 Log.i("Error", e.toString())
             }
         }
     }
 
-    private fun buildPhotoAPI(photoRef: String): String {
-        return Constants.BASE_URL + "place/photo?" +
+    private fun buildPhotoAPI(photoRef: String): ImageApiString {
+        return ImageApiString(Constants.BASE_URL + "place/photo?" +
                 "maxwidth=400" +
                 "&photoreference=" +photoRef +
-                "&key="+Constants.API_KEY
+                "&key="+Constants.API_KEY)
     }
 
 }
