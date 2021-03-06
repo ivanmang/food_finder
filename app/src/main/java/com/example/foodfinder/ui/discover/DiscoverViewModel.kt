@@ -19,6 +19,8 @@ import com.example.foodfinder.repository.PlacesRepository
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
+enum class PlaceApiStatus {LOADING, ERROR, DONE}
+
 class DiscoverViewModel(application: Application) : ViewModel() {
     private val database = getDatabase(application)
     private val restaurantRepository = PlacesRepository(database.placesDatabaseDao)
@@ -28,15 +30,31 @@ class DiscoverViewModel(application: Application) : ViewModel() {
     val restaurantDetail : LiveData<PlaceDetail>
         get() = _restaurantDetail
 
+    private val _restaurantPlace = MutableLiveData<Place>()
+
+    val restaurantPlace : LiveData<Place>
+        get() = _restaurantPlace
+
+    // The internal MutableLiveData that stores the status of the most recent request
+    private val _status = MutableLiveData<PlaceApiStatus>()
+
+    // The external immutable LiveData for the request status
+    val status: LiveData<PlaceApiStatus>
+        get() = _status
+
     val restaurantList : LiveData<List<Place>> = database.placesDatabaseDao.getAllPlaces()
 
     fun getNearbyRestaurant(location: Location){
         viewModelScope.launch {
+            _status.value = PlaceApiStatus.LOADING
             try {
+                restaurantRepository.clearDatabase()
                 val response = PlacesApi.retrofitService.getNearByLocation(locationToString(location), 1500, "restaurant", Constants.API_KEY ).results
                 restaurantRepository.insertToDatabase(response)
+                _status.value = PlaceApiStatus.DONE
                 Log.i("value", response.toString())
             } catch (e :Exception) {
+                _status.value = PlaceApiStatus.ERROR
                 Log.i("Error", e.toString())
             }
         }
@@ -48,13 +66,32 @@ class DiscoverViewModel(application: Application) : ViewModel() {
 
     fun getNearByRestaurantDetail(place: Place?) {
         viewModelScope.launch {
+            _status.value = PlaceApiStatus.LOADING
             try {
                 _restaurantDetail.value = PlacesApi.retrofitService.getPlaceDetail(place!!.place_id, Constants.API_KEY).result
+                _status.value = PlaceApiStatus.DONE
                 //Log.i("value", response.toString())
             } catch (e :Exception) {
+                _status.value = PlaceApiStatus.ERROR
                 Log.i("Error", e.toString())
             }
         }
+    }
+
+    fun getPlaceFromName(title: String?){
+        viewModelScope.launch {
+            _status.value = PlaceApiStatus.LOADING
+            try {
+                if (title != null) {
+                    _restaurantPlace.value = restaurantRepository.findPlaceByName(title)
+                    _status.value = PlaceApiStatus.DONE
+                }
+            } catch (e : Exception){
+                _status.value = PlaceApiStatus.ERROR
+                Log.i("Error", e.toString())
+            }
+        }
+
     }
 
 }

@@ -11,11 +11,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.foodfinder.Constants
 import com.example.foodfinder.R
+import com.example.foodfinder.databinding.FragmentBrowseBinding
+import com.example.foodfinder.databinding.FragmentDiscoverBinding
 import com.example.foodfinder.network.PlacesApi
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -35,6 +39,7 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
     private lateinit var lastLocation : Location
     private var lat : Double = 0.0
     private var long : Double = 0.0
+    private lateinit var binding : FragmentDiscoverBinding
 
 
     override fun onCreateView(
@@ -44,12 +49,18 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
     ): View? {
         discoverViewModel =
                 ViewModelProvider(this, DiscoverViewModelFactory( requireActivity().application )).get(DiscoverViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_discover, container, false)
-
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_discover, container, false)
+        binding.viewModel = discoverViewModel
+        binding.lifecycleOwner = this
+        binding.getNearbyPlaceButton.setOnClickListener {
+            updateCamera()
+            discoverViewModel.getNearbyRestaurant(lastLocation)
+            addMarkerToNearByRestaurant()
+        }
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        return root
+        return binding.root
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -67,8 +78,6 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
                 if (task.isSuccessful && task.result != null) {
                     lastLocation = task.result!!
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation!!.latitude, lastLocation!!.longitude), ZOOM_LEVEL))
-                    discoverViewModel.getNearbyRestaurant(lastLocation)
-                    addMarkerToNearByRestaurant()
                 } else {
                     val defaultLocation = LatLng(37.422160, -122.084270)
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, ZOOM_LEVEL))
@@ -84,16 +93,26 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
     }
 
     private fun addMarkerToNearByRestaurant(){
-        discoverViewModel.restaurantList.observe(this, Observer { places ->
+        discoverViewModel.restaurantList.observe(viewLifecycleOwner, Observer { places ->
             for (place in places){
                 discoverViewModel.getNearByRestaurantDetail(place)
             }
         })
-        discoverViewModel.restaurantDetail.observe(this, Observer { it ->
+        map.clear()
+        discoverViewModel.restaurantDetail.observe(viewLifecycleOwner, Observer { it ->
             lat = it.geometry.location.lat.toDouble()
             long = it.geometry.location.lng.toDouble()
             val snippet = it.rating
             map.addMarker(MarkerOptions().title(it.name).snippet(snippet).position(LatLng(lat, long)))
+        })
+        map.setOnMarkerClickListener(GoogleMap.OnMarkerClickListener {
+            marker ->
+            marker.showInfoWindow()
+            discoverViewModel.getPlaceFromName(marker.title)
+            discoverViewModel.restaurantPlace.observe(viewLifecycleOwner, Observer { it ->
+                this.findNavController().navigate(DiscoverFragmentDirections.actionNavigationHomeToRestaurantDetailFragment(it))
+            })
+            return@OnMarkerClickListener true
         })
         //Log.i("LIst", list.value?.size.toString())
         //val first = list.value?.get(0)
