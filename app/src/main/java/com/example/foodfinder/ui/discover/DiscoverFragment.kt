@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.foodfinder.Constants
+import com.example.foodfinder.Place
 import com.example.foodfinder.R
 import com.example.foodfinder.databinding.FragmentBrowseBinding
 import com.example.foodfinder.databinding.FragmentDiscoverBinding
@@ -36,7 +37,6 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private val ZOOM_LEVEL = 18f
     private val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 111
-    private lateinit var lastLocation : Location
     private var lat : Double = 0.0
     private var long : Double = 0.0
     private lateinit var binding : FragmentDiscoverBinding
@@ -50,12 +50,10 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
         discoverViewModel =
                 ViewModelProvider(this, DiscoverViewModelFactory( requireActivity().application )).get(DiscoverViewModel::class.java)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_discover, container, false)
-        binding.viewModel = discoverViewModel
         binding.lifecycleOwner = this
         binding.getNearbyPlaceButton.setOnClickListener {
+            map.clear()
             updateCamera()
-            discoverViewModel.getNearbyRestaurant(lastLocation)
-            addMarkerToNearByRestaurant()
         }
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -76,8 +74,14 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
             val locationResult = locationProvider.lastLocation
             locationResult.addOnCompleteListener { task ->
                 if (task.isSuccessful && task.result != null) {
-                    lastLocation = task.result!!
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation!!.latitude, lastLocation!!.longitude), ZOOM_LEVEL))
+                    discoverViewModel.setLastLocation(task.result!!)
+                    discoverViewModel.lastLocation.value?.let { it1 ->
+                        discoverViewModel.getNearbyRestaurant(
+                            it1
+                        )
+                    }
+                    addMarkerToNearByRestaurant()
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(discoverViewModel.lastLocation.value!!.latitude, discoverViewModel.lastLocation.value!!.longitude), ZOOM_LEVEL))
                 } else {
                     val defaultLocation = LatLng(37.422160, -122.084270)
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, ZOOM_LEVEL))
@@ -98,7 +102,7 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
                 discoverViewModel.getNearByRestaurantDetail(place)
             }
         })
-        map.clear()
+
         discoverViewModel.restaurantDetail.observe(viewLifecycleOwner, Observer { it ->
             lat = it.geometry.location.lat.toDouble()
             long = it.geometry.location.lng.toDouble()

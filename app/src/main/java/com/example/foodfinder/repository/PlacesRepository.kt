@@ -30,6 +30,10 @@ private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : PlacesDataSour
         return@withContext database.getPlaceByName(name)
     }
 
+    suspend fun getAllPlace() = withContext(ioDispatcher){
+        return@withContext database.getAllPlaces()
+    }
+
     private fun locationToString(location: Location) : String {
         return location.latitude.toString() + "," + location.longitude.toString()
     }

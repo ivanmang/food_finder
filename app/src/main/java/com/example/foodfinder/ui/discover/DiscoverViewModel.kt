@@ -35,6 +35,11 @@ class DiscoverViewModel(application: Application) : ViewModel() {
     val restaurantPlace : LiveData<Place>
         get() = _restaurantPlace
 
+    private val _lastLocation = MutableLiveData<Location>()
+
+    val lastLocation : LiveData<Location>
+        get() = _lastLocation
+
     // The internal MutableLiveData that stores the status of the most recent request
     private val _status = MutableLiveData<PlaceApiStatus>()
 
@@ -92,6 +97,10 @@ class DiscoverViewModel(application: Application) : ViewModel() {
             }
         }
 
+    }
+
+    fun setLastLocation(lastLocation : Location){
+        _lastLocation.value = lastLocation
     }
 
 }
