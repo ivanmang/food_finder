@@ -9,10 +9,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodfinder.ui.browse.RestaurantListAdapter
 import com.example.foodfinder.ui.discover.PlaceApiStatus
+import com.example.foodfinder.ui.liked_restaurant.LikedRestaurantListAdapter
 
 @BindingAdapter("listData")
 fun bindRecyclerView(recyclerView: RecyclerView, data: List<Place>?) {
     val adapter = recyclerView.adapter as RestaurantListAdapter
+    adapter.submitList(data)
+}
+
+@BindingAdapter("listLikedData")
+fun bindLikedRecyclerView(recyclerView: RecyclerView, data: List<Place>?) {
+    val adapter = recyclerView.adapter as LikedRestaurantListAdapter
     adapter.submitList(data)
 }
 

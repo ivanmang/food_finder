@@ -15,6 +15,6 @@ class LikedViewModel(application: Application) : ViewModel() {
     private val database = getLikeDatabase(application)
     private lateinit var likedViewModel: LikedViewModel
 
-    val LikedRestaurantList : LiveData<List<Place>> = database.likedDatabaseDao.getAllPlaces()
+    val likedRestaurantList : LiveData<List<Place>> = database.likedDatabaseDao.getAllPlaces()
 
 }
