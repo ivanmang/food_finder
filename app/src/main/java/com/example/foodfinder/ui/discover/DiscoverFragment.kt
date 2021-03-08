@@ -28,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import java.util.*
 
@@ -40,6 +41,7 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
     private var lat : Double = 0.0
     private var long : Double = 0.0
     private lateinit var binding : FragmentDiscoverBinding
+    private var currentMarker : Marker? = null
 
 
     override fun onCreateView(
@@ -52,7 +54,6 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_discover, container, false)
         binding.lifecycleOwner = this
         binding.getNearbyPlaceButton.setOnClickListener {
-            map.clear()
             updateCamera()
         }
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
@@ -63,7 +64,6 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        updateCamera()
         enableMyLocation()
     }
 
@@ -80,6 +80,7 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
                             it1
                         )
                     }
+                    map.clear()
                     addMarkerToNearByRestaurant()
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(discoverViewModel.lastLocation.value!!.latitude, discoverViewModel.lastLocation.value!!.longitude), ZOOM_LEVEL))
                 } else {
@@ -87,6 +88,8 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, ZOOM_LEVEL))
                 }
             }
+        } else {
+            enableMyLocation()
         }
     }
 
@@ -106,18 +109,27 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
         discoverViewModel.restaurantDetail.observe(viewLifecycleOwner, Observer { it ->
             lat = it.geometry.location.lat.toDouble()
             long = it.geometry.location.lng.toDouble()
-            val snippet = it.rating
-            map.addMarker(MarkerOptions().title(it.name).snippet(snippet).position(LatLng(lat, long)))
+            map.addMarker(MarkerOptions().title(it.name).position(LatLng(lat, long)))
         })
         map.setOnMarkerClickListener(GoogleMap.OnMarkerClickListener {
             marker ->
             marker.showInfoWindow()
-            discoverViewModel.getPlaceFromName(marker.title)
-            discoverViewModel.restaurantPlace.observe(viewLifecycleOwner, Observer { it ->
-                this.findNavController().navigate(DiscoverFragmentDirections.actionNavigationHomeToRestaurantDetailFragment(it))
-            })
+            currentMarker = marker
+            Log.i("hi1",marker.title)
+            Log.i("hi7", discoverViewModel.restaurantPlace.value?.name.toString())
             return@OnMarkerClickListener true
         })
+        map.setOnInfoWindowClickListener {
+            Log.i("hi2", currentMarker!!.title)
+            //discoverViewModel.getPlaceFromName(marker.title)
+            Log.i("hi3", discoverViewModel.restaurantPlace.value?.name.toString())
+            /*discoverViewModel.restaurantPlace.observe(viewLifecycleOwner, Observer { place ->
+                Log.i("hi4", discoverViewModel.restaurantPlace.value?.name.toString())
+                this.findNavController().navigate(DiscoverFragmentDirections.actionNavigationHomeToRestaurantDetailFragment(place))
+                Log.i("hi5", discoverViewModel.restaurantPlace.value?.name.toString())
+            })*/
+            Log.i("hi6", discoverViewModel.restaurantPlace.value?.name.toString())
+        }
         //Log.i("LIst", list.value?.size.toString())
         //val first = list.value?.get(0)
         //discoverViewModel.getNearByRestaurantDetail(first)

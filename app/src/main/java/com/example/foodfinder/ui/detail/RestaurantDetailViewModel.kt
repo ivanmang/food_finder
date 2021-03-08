@@ -10,6 +10,7 @@ import com.example.foodfinder.Constants
 import com.example.foodfinder.Place
 import com.example.foodfinder.PlaceDetail
 import com.example.foodfinder.network.PlacesApi
+import com.example.foodfinder.ui.discover.PlaceApiStatus
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -23,18 +24,31 @@ class RestaurantDetailViewModel(place: Place, application: Application) : Androi
     val photoApiLink : LiveData<String>
         get() = _photoApiLink
 
+    // The internal MutableLiveData that stores the status of the most recent request
+    private val _status = MutableLiveData<PlaceApiStatus>()
+
+    // The external immutable LiveData for the request status
+    val status: LiveData<PlaceApiStatus>
+        get() = _status
+
     init {
         getPlaceDetail(place)
     }
 
-    fun getPlaceDetail(place: Place){
+    private fun getPlaceDetail(place: Place){
         viewModelScope.launch {
             try {
-                _placeDetail.value = PlacesApi.retrofitService.getPlaceDetail(place.place_id, Constants.API_KEY).result
-                val photoRef =  _placeDetail.value!!.photos.get(0).photo_reference
-                _photoApiLink.value = buildPhotoAPI(photoRef)
+                _status.value = PlaceApiStatus.LOADING
+                _placeDetail.value = PlacesApi.retrofitService.getPlaceDetail(place.place_id,"name, photo, place_id, vicinity",  Constants.API_KEY).result
+                if (_placeDetail.value!!.photos.isNotEmpty()){
+                    val photoRef =  _placeDetail.value!!.photos[0].photo_reference
+                    _photoApiLink.value = buildPhotoAPI(photoRef)
+                }
+
+                _status.value = PlaceApiStatus.DONE
             } catch (e : Exception){
                 Log.i("Error", e.toString())
+                _status.value = PlaceApiStatus.ERROR
             }
         }
     }

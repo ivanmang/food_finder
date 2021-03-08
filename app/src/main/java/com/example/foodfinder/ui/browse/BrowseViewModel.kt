@@ -31,7 +31,7 @@ class BrowseViewModel(application: Application) : ViewModel() {
     fun getNearbyRestaurant(location: Location){
         viewModelScope.launch {
             try {
-                val response = PlacesApi.retrofitService.getNearByLocation(locationToString(location), 1500, "restaurant", Constants.API_KEY ).results
+                val response = PlacesApi.retrofitService.getNearByLocation(locationToString(location), 100, "restaurant", Constants.API_KEY ).results
                 restaurantRepository.insertToDatabase(response)
                 //Log.i("value", response.toString())
             } catch (e :Exception) {

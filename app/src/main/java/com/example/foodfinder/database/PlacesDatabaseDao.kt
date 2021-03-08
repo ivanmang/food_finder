@@ -13,7 +13,7 @@ interface PlacesDatabaseDao {
     @Update
     suspend fun update(place : Place)
 
-    @Query("SELECT * FROM place_table ORDER BY rating DESC")
+    @Query("SELECT * FROM place_table")
     fun getAllPlaces(): LiveData<List<Place>>
 
     @Query("SELECT * FROM place_table WHERE name = :title")

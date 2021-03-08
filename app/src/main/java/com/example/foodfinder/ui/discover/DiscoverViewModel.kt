@@ -54,7 +54,7 @@ class DiscoverViewModel(application: Application) : ViewModel() {
             _status.value = PlaceApiStatus.LOADING
             try {
                 restaurantRepository.clearDatabase()
-                val response = PlacesApi.retrofitService.getNearByLocation(locationToString(location), 1500, "restaurant", Constants.API_KEY ).results
+                val response = PlacesApi.retrofitService.getNearByLocation(locationToString(location), 100, "restaurant", Constants.API_KEY ).results
                 restaurantRepository.insertToDatabase(response)
                 _status.value = PlaceApiStatus.DONE
                 Log.i("value", response.toString())
@@ -73,7 +73,7 @@ class DiscoverViewModel(application: Application) : ViewModel() {
         viewModelScope.launch {
             _status.value = PlaceApiStatus.LOADING
             try {
-                _restaurantDetail.value = PlacesApi.retrofitService.getPlaceDetail(place!!.place_id, Constants.API_KEY).result
+                _restaurantDetail.value = PlacesApi.retrofitService.getPlaceDetail(place!!.place_id, "name, photo, place_id, vicinity", Constants.API_KEY).result
                 _status.value = PlaceApiStatus.DONE
                 //Log.i("value", response.toString())
             } catch (e :Exception) {
@@ -89,6 +89,7 @@ class DiscoverViewModel(application: Application) : ViewModel() {
             try {
                 if (title != null) {
                     _restaurantPlace.value = restaurantRepository.findPlaceByName(title)
+                    Log.i("Name", title)
                     _status.value = PlaceApiStatus.DONE
                 }
             } catch (e : Exception){
