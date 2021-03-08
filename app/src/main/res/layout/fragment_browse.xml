@@ -25,18 +25,17 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/currentLocationButton"
+    <ProgressBar
+        android:id="@+id/browse_progressBar"
+        style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:contentDescription="@string/content_myLocationButton"
-        android:focusable="true"
-        android:src="@android:drawable/ic_menu_mylocation"
+        android:visibility="gone"
+        app:ApiStatus="@{viewModel.status}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/restaurant_list" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

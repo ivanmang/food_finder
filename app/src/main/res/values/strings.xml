@@ -9,4 +9,5 @@
     <string name="a_picture_describing_the_restaurant">A picture describing the restaurant</string>
     <string name="like">Like</string>
     <string name="dislike">Dislike</string>
+    <string name="refresh">Refresh</string>
 </resources>

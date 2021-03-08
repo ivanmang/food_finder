@@ -13,6 +13,7 @@ import com.example.foodfinder.Place
 import com.example.foodfinder.database.getDatabase
 import com.example.foodfinder.network.PlacesApi
 import com.example.foodfinder.repository.PlacesRepository
+import com.example.foodfinder.ui.discover.PlaceApiStatus
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -23,6 +24,14 @@ class BrowseViewModel(application: Application) : ViewModel() {
 
     val restaurantList : LiveData<List<Place>> = database.placesDatabaseDao.getAllPlaces()
 
+
+    // The internal MutableLiveData that stores the status of the most recent request
+    private val _status = MutableLiveData<PlaceApiStatus>()
+
+    // The external immutable LiveData for the request status
+    val status: LiveData<PlaceApiStatus>
+        get() = _status
+
     private val _navigateToSelectedProperty = MutableLiveData<Place>()
 
     val navigateToSelectedProperty: LiveData<Place>
@@ -31,11 +40,13 @@ class BrowseViewModel(application: Application) : ViewModel() {
     fun getNearbyRestaurant(location: Location){
         viewModelScope.launch {
             try {
+                _status.value = PlaceApiStatus.LOADING
                 val response = PlacesApi.retrofitService.getNearByLocation(locationToString(location), 100, "restaurant", Constants.API_KEY ).results
                 restaurantRepository.insertToDatabase(response)
-                //Log.i("value", response.toString())
+                _status.value = PlaceApiStatus.DONE
             } catch (e :Exception) {
                 Log.i("Error", e.toString())
+                _status.value = PlaceApiStatus.ERROR
             }
         }
     }

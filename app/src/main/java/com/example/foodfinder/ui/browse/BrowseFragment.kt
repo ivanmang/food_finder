@@ -7,9 +7,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -36,7 +34,6 @@ class BrowseFragment : Fragment() {
     }
 
 
-    @SuppressLint("MissingPermission")
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -50,21 +47,6 @@ class BrowseFragment : Fragment() {
             browseViewModel.displayPropertyDetails(it)
         })
 
-        binding.currentLocationButton.setOnClickListener {
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity as Activity)
-            if (isForegroundLocationGranted()) {
-                val locationResult = fusedLocationClient.lastLocation
-                locationResult.addOnCompleteListener { task ->
-                    if (task.isSuccessful && task.result != null) {
-                        lastLocation = task.result
-                        browseViewModel.clearDatabase()
-                        browseViewModel.getNearbyRestaurant(lastLocation)
-                        Log.i("Restaurant :", "Success")
-                    }
-                }
-            }
-        }
-
         browseViewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
             if ( null != it ) {
                 // Must find the NavController from the Fragment
@@ -74,8 +56,33 @@ class BrowseFragment : Fragment() {
             }
         })
 
-
+        setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.refresh_action_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    /**
+     * Updates the filter in the [OverviewViewModel] when the menu items are selected from the
+     * overflow menu.
+     */
+    @SuppressLint("MissingPermission")
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity as Activity)
+        if (isForegroundLocationGranted()) {
+            val locationResult = fusedLocationClient.lastLocation
+            locationResult.addOnCompleteListener { task ->
+                if (task.isSuccessful && task.result != null) {
+                    lastLocation = task.result
+                    browseViewModel.clearDatabase()
+                    browseViewModel.getNearbyRestaurant(lastLocation)
+                }
+            }
+        }
+        return true
     }
 
 

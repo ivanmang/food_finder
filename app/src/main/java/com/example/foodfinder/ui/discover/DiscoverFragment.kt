@@ -7,9 +7,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -53,13 +51,27 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
                 ViewModelProvider(this, DiscoverViewModelFactory( requireActivity().application )).get(DiscoverViewModel::class.java)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_discover, container, false)
         binding.lifecycleOwner = this
-        binding.getNearbyPlaceButton.setOnClickListener {
+/*        binding.getNearbyPlaceButton.setOnClickListener {
             updateCamera()
-        }
+        }*/
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
+        setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.refresh_action_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    /**
+     * Updates the filter in the [OverviewViewModel] when the menu items are selected from the
+     * overflow menu.
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        updateCamera()
+        return true
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
