@@ -114,21 +114,16 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
         map.setOnMarkerClickListener(GoogleMap.OnMarkerClickListener {
             marker ->
             marker.showInfoWindow()
-            currentMarker = marker
-            Log.i("hi1",marker.title)
-            Log.i("hi7", discoverViewModel.restaurantPlace.value?.name.toString())
+            discoverViewModel.getPlaceFromName(marker.title)
             return@OnMarkerClickListener true
         })
-        map.setOnInfoWindowClickListener {
-            Log.i("hi2", currentMarker!!.title)
-            //discoverViewModel.getPlaceFromName(marker.title)
-            Log.i("hi3", discoverViewModel.restaurantPlace.value?.name.toString())
-            /*discoverViewModel.restaurantPlace.observe(viewLifecycleOwner, Observer { place ->
-                Log.i("hi4", discoverViewModel.restaurantPlace.value?.name.toString())
-                this.findNavController().navigate(DiscoverFragmentDirections.actionNavigationHomeToRestaurantDetailFragment(place))
-                Log.i("hi5", discoverViewModel.restaurantPlace.value?.name.toString())
-            })*/
-            Log.i("hi6", discoverViewModel.restaurantPlace.value?.name.toString())
+        map.setOnInfoWindowClickListener { info ->
+
+            discoverViewModel.restaurantPlace.observe(viewLifecycleOwner, Observer {
+                if (null != it){
+                    this.findNavController().navigate(DiscoverFragmentDirections.actionNavigationHomeToRestaurantDetailFragment(it))
+                }
+            })
         }
         //Log.i("LIst", list.value?.size.toString())
         //val first = list.value?.get(0)
