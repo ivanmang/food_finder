@@ -39,7 +39,6 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
     private var lat : Double = 0.0
     private var long : Double = 0.0
     private lateinit var binding : FragmentDiscoverBinding
-    private var currentMarker : Marker? = null
 
 
     override fun onCreateView(
@@ -51,9 +50,6 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
                 ViewModelProvider(this, DiscoverViewModelFactory( requireActivity().application )).get(DiscoverViewModel::class.java)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_discover, container, false)
         binding.lifecycleOwner = this
-/*        binding.getNearbyPlaceButton.setOnClickListener {
-            updateCamera()
-        }*/
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         setHasOptionsMenu(true)

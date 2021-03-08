@@ -9,12 +9,19 @@ import androidx.lifecycle.viewModelScope
 import com.example.foodfinder.Constants
 import com.example.foodfinder.Place
 import com.example.foodfinder.PlaceDetail
+import com.example.foodfinder.database.getDatabase
+import com.example.foodfinder.database.getLikeDatabase
 import com.example.foodfinder.network.PlacesApi
+import com.example.foodfinder.repository.LikedRepository
+import com.example.foodfinder.repository.PlacesRepository
 import com.example.foodfinder.ui.discover.PlaceApiStatus
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class RestaurantDetailViewModel(place: Place, application: Application) : AndroidViewModel(application){
+
+    private val database = getLikeDatabase(application)
+    private val likedRepository = LikedRepository(database.likedDatabaseDao)
 
     private val _placeDetail = MutableLiveData<PlaceDetail>()
     val placeDetail : LiveData<PlaceDetail>
@@ -49,6 +56,16 @@ class RestaurantDetailViewModel(place: Place, application: Application) : Androi
             } catch (e : Exception){
                 Log.i("Error", e.toString())
                 _status.value = PlaceApiStatus.ERROR
+            }
+        }
+    }
+
+    fun insertLikedPlace(place : Place){
+        viewModelScope.launch {
+            try {
+                likedRepository.insertToDatabase(place)
+            } catch (e : Exception){
+                Log.i("Error", e.toString())
             }
         }
     }

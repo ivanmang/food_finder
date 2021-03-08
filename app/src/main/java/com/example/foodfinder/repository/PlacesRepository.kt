@@ -6,14 +6,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.foodfinder.Constants
 import com.example.foodfinder.Place
+import com.example.foodfinder.database.LikedDatabase
+import com.example.foodfinder.database.LikedDatabaseDao
 import com.example.foodfinder.database.PlacesDatabaseDao
 import com.example.foodfinder.network.PlacesApi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PlacesRepository(private val database: PlacesDatabaseDao ,
-private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : PlacesDataSource{
+class PlacesRepository(private val database: PlacesDatabaseDao,
+private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) {
 
     suspend fun insertToDatabase(places : List<Place>) = withContext(ioDispatcher){
         for(place in places){
@@ -28,14 +30,6 @@ private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : PlacesDataSour
 
     suspend fun findPlaceByName(name : String) = withContext(ioDispatcher){
         return@withContext database.getPlaceByName(name)
-    }
-
-    suspend fun getAllPlace() = withContext(ioDispatcher){
-        return@withContext database.getAllPlaces()
-    }
-
-    private fun locationToString(location: Location) : String {
-        return location.latitude.toString() + "," + location.longitude.toString()
     }
 
 

@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_discover">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_discover"
         android:name="com.example.foodfinder.ui.discover.DiscoverFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_discover" >
+        android:label="@string/title_discover"
+        tools:layout="@layout/fragment_discover">
         <action
             android:id="@+id/action_navigation_home_to_restaurantDetailFragment"
             app:destination="@id/restaurantDetailFragment"
-            app:popUpTo="@id/navigation_home"
+            app:popUpTo="@id/navigation_discover"
             app:popUpToInclusive="false" />
     </fragment>
 
@@ -32,10 +32,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.foodfinder.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_visited"
+        android:name="com.example.foodfinder.ui.liked_restaurant.LikedFragment"
+        android:label="@string/visited"
+        tools:layout="@layout/fragment_visited" />
     <fragment
         android:id="@+id/restaurantDetailFragment"
         android:name="com.example.foodfinder.ui.detail.RestaurantDetailFragment"

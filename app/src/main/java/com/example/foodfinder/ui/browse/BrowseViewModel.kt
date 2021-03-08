@@ -11,6 +11,7 @@ import com.example.foodfinder.ApiResult
 import com.example.foodfinder.Constants
 import com.example.foodfinder.Place
 import com.example.foodfinder.database.getDatabase
+import com.example.foodfinder.database.getLikeDatabase
 import com.example.foodfinder.network.PlacesApi
 import com.example.foodfinder.repository.PlacesRepository
 import com.example.foodfinder.ui.discover.PlaceApiStatus

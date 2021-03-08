@@ -7,8 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.foodfinder.databinding.FragmentDetailBinding
+import com.example.foodfinder.ui.discover.DiscoverViewModel
 
 class RestaurantDetailFragment : Fragment() {
+
+    private lateinit var restaurantDetailViewModel: RestaurantDetailViewModel
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val application = requireNotNull(activity).application
         val binding = FragmentDetailBinding.inflate(inflater)
@@ -16,7 +20,10 @@ class RestaurantDetailFragment : Fragment() {
         val place = RestaurantDetailFragmentArgs.fromBundle(requireArguments()).selectedPlace
         val viewModelFactory = RestaurantViewModelFactory(place, application)
 
-        binding.viewModel = ViewModelProvider(this, viewModelFactory).get(RestaurantDetailViewModel::class.java)
+        restaurantDetailViewModel= ViewModelProvider(this, viewModelFactory).get(RestaurantDetailViewModel::class.java)
+        binding.likeButton.setOnClickListener {
+            restaurantDetailViewModel.insertLikedPlace(place)
+        }
 
         return binding.root
     }

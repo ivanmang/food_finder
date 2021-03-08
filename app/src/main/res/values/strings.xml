@@ -4,10 +4,12 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_discover">Discover</string>
     <string name="title_browse">Browse</string>
-    <string name="title_favourite">Favourite</string>
     <string name="content_myLocationButton">Click to display nearby restauarnt location</string>
     <string name="a_picture_describing_the_restaurant">A picture describing the restaurant</string>
     <string name="like">Like</string>
     <string name="dislike">Dislike</string>
     <string name="refresh">Refresh</string>
+    <string name="visited">Liked</string>
+    <string name="liked_restaurant">Liked restaurant</string>
+    <string name="dislike_restaurant">Dislike Restaurant</string>
 </resources>

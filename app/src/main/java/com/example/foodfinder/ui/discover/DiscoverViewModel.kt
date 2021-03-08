@@ -9,12 +9,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodfinder.Constants
 import com.example.foodfinder.Place
-import com.example.foodfinder.PlaceApiResult
 import com.example.foodfinder.PlaceDetail
 import com.example.foodfinder.database.getDatabase
+import com.example.foodfinder.database.getLikeDatabase
 import com.example.foodfinder.network.PlacesApi
-import com.example.foodfinder.network.PlacesApiService
-import com.example.foodfinder.repository.PlacesDataSource
 import com.example.foodfinder.repository.PlacesRepository
 import kotlinx.coroutines.launch
 import java.lang.Exception

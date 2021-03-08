@@ -78,12 +78,6 @@
                 android:text="@string/like"
                 app:backgroundTint="#4CAF50" />
 
-            <Button
-                android:id="@+id/dislike_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/dislike"
-                app:backgroundTint="#E91E63" />
         </LinearLayout>
     </ScrollView>
 
