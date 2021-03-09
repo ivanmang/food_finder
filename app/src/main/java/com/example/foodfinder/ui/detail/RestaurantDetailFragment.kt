@@ -15,12 +15,15 @@ class RestaurantDetailFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val application = requireNotNull(activity).application
-        val binding = FragmentDetailBinding.inflate(inflater)
-        binding.lifecycleOwner = this
         val place = RestaurantDetailFragmentArgs.fromBundle(requireArguments()).selectedPlace
         val viewModelFactory = RestaurantViewModelFactory(place, application)
+        val binding = FragmentDetailBinding.inflate(inflater)
+        binding.lifecycleOwner = this
 
-        restaurantDetailViewModel= ViewModelProvider(this, viewModelFactory).get(RestaurantDetailViewModel::class.java)
+        restaurantDetailViewModel = ViewModelProvider(this, viewModelFactory).get(RestaurantDetailViewModel::class.java)
+        binding.viewModel = restaurantDetailViewModel
+
+
         binding.likeButton.setOnClickListener {
             restaurantDetailViewModel.insertLikedPlace(place)
         }
