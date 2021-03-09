@@ -60,12 +60,13 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
      * overflow menu.
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        updateCamera()
+        addMarkerToNearByRestaurant()
         return true
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        updateCamera()
         enableMyLocation()
     }
 
@@ -83,7 +84,6 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
                         )
                     }
                     map.clear()
-                    addMarkerToNearByRestaurant()
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(discoverViewModel.lastLocation.value!!.latitude, discoverViewModel.lastLocation.value!!.longitude), ZOOM_LEVEL))
                 } else {
                     val defaultLocation = LatLng(37.422160, -122.084270)
@@ -127,11 +127,6 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
                 }
             })
         }
-        //Log.i("LIst", list.value?.size.toString())
-        //val first = list.value?.get(0)
-        //discoverViewModel.getNearByRestaurantDetail(first)
-        //val lat = discoverViewModel.restaurantDetail.value?.geometry?.location?.lat
-        //val long = discoverViewModel.restaurantDetail.value?.geometry?.location?.lng
     }
 
 
