@@ -13,7 +13,6 @@ import com.example.foodfinder.ui.discover.DiscoverViewModel
 class LikedViewModel(application: Application) : ViewModel() {
 
     private val database = getLikeDatabase(application)
-    private lateinit var likedViewModel: LikedViewModel
 
     val likedRestaurantList : LiveData<List<Place>> = database.likedDatabaseDao.getAllPlaces()
 

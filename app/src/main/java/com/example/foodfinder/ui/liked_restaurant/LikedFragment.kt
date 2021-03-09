@@ -28,7 +28,9 @@ class LikedFragment : Fragment() {
                 LikedViewModel::class.java)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_visited, container, false)
         binding.lifecycleOwner = this
+        binding.viewModel = likedViewModel
         binding.likedRestaurantList.adapter = LikedRestaurantListAdapter()
+
 
         return binding.root
     }
