@@ -3,7 +3,7 @@ package com.example.foodfinder.ui.detail
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.foodfinder.Place
+import com.example.foodfinder.network.model.Place
 
 class RestaurantViewModelFactory(private val place: Place,
                                  private val application: Application) : ViewModelProvider.Factory {

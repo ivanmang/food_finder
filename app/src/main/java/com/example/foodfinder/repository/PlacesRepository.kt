@@ -1,15 +1,7 @@
 package com.example.foodfinder.repository
 
-import android.location.Location
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.foodfinder.Constants
-import com.example.foodfinder.Place
-import com.example.foodfinder.database.LikedDatabase
-import com.example.foodfinder.database.LikedDatabaseDao
+import com.example.foodfinder.network.model.Place
 import com.example.foodfinder.database.PlacesDatabaseDao
-import com.example.foodfinder.network.PlacesApi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

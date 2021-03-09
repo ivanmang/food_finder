@@ -6,7 +6,7 @@
     <data>
         <variable
             name="place"
-            type="com.example.foodfinder.Place" />
+            type="com.example.foodfinder.network.model.Place" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

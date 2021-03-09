@@ -3,11 +3,9 @@ package com.example.foodfinder.ui.browse
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.foodfinder.Place
-import com.example.foodfinder.R
+import com.example.foodfinder.network.model.Place
 import com.example.foodfinder.databinding.RestaurantViewItemBinding
 
 class RestaurantListAdapter(val onClickListener: OnClickListener) : ListAdapter<Place, RestaurantListAdapter.PlaceViewHolder>(DiffCallback) {

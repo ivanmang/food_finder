@@ -7,13 +7,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.foodfinder.Constants
-import com.example.foodfinder.Place
-import com.example.foodfinder.PlaceDetail
-import com.example.foodfinder.database.getDatabase
+import com.example.foodfinder.network.model.Place
+import com.example.foodfinder.network.model.PlaceDetail
 import com.example.foodfinder.database.getLikeDatabase
 import com.example.foodfinder.network.PlacesApi
 import com.example.foodfinder.repository.LikedRepository
-import com.example.foodfinder.repository.PlacesRepository
 import com.example.foodfinder.ui.discover.PlaceApiStatus
 import kotlinx.coroutines.launch
 import java.lang.Exception

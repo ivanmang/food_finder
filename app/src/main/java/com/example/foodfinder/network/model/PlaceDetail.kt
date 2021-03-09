@@ -1,4 +1,4 @@
-package com.example.foodfinder
+package com.example.foodfinder.network.model
 
 
 data class PlaceDetail (

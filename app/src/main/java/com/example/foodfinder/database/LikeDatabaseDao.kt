@@ -3,7 +3,7 @@ package com.example.foodfinder.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.foodfinder.Place
+import com.example.foodfinder.network.model.Place
 
 @Dao
 interface LikedDatabaseDao {

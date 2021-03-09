@@ -1,4 +1,4 @@
-package com.example.foodfinder
+package com.example.foodfinder.network.model
 
 data class PlaceApiResult (
     val html_attributions : List<String>,

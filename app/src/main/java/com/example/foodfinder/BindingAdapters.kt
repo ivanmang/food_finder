@@ -3,10 +3,10 @@ package com.example.foodfinder
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
-import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.foodfinder.network.model.Place
 import com.example.foodfinder.ui.browse.RestaurantListAdapter
 import com.example.foodfinder.ui.discover.PlaceApiStatus
 import com.example.foodfinder.ui.liked_restaurant.LikedRestaurantListAdapter

@@ -1,6 +1,6 @@
 package com.example.foodfinder.repository
 
-import com.example.foodfinder.Place
+import com.example.foodfinder.network.model.Place
 import com.example.foodfinder.database.LikedDatabaseDao
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

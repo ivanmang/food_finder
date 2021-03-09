@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.foodfinder.Place
+import com.example.foodfinder.network.model.Place
 import com.example.foodfinder.databinding.RestaurantViewItemBinding
 
 class LikedRestaurantListAdapter() : ListAdapter<Place, LikedRestaurantListAdapter.PlaceViewHolder>(DiffCallback) {
