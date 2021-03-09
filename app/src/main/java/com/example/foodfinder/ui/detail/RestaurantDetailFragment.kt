@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.foodfinder.databinding.FragmentDetailBinding
 import com.example.foodfinder.ui.discover.DiscoverViewModel
 
@@ -26,6 +27,7 @@ class RestaurantDetailFragment : Fragment() {
 
         binding.likeButton.setOnClickListener {
             restaurantDetailViewModel.insertLikedPlace(place)
+            this.findNavController().navigate(RestaurantDetailFragmentDirections.actionRestaurantDetailFragmentToNavigationVisited())
         }
 
         return binding.root

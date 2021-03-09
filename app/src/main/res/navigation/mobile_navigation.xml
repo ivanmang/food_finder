@@ -43,6 +43,10 @@
         <argument
             android:name="selectedPlace"
             app:argType="com.example.foodfinder.Place" />
+        <action
+            android:id="@+id/action_restaurantDetailFragment_to_navigation_visited"
+            app:destination="@id/navigation_visited"
+            app:popUpTo="@id/navigation_browse" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"

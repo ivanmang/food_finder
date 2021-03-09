@@ -18,6 +18,9 @@ interface LikedDatabaseDao {
 
     @Query("DELETE FROM place_table")
     suspend fun deleteAll()
+
+    @Query("DELETE FROM place_table WHERE place_id = :placeID")
+    suspend fun deleteByID(placeID : String)
 }
 
 @Database(entities = [Place::class], version = 1, exportSchema = false)
