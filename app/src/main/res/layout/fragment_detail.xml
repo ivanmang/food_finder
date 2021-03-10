@@ -28,8 +28,7 @@
                 android:layout_height="match_parent"
                 android:minHeight="80dp"
                 app:layoutDescription="@xml/fragment_detail_scene"
-                app:layout_scrollFlags="scroll|enterAlways|snap|exitUntilCollapsed"
-                app:motionDebug="SHOW_PATH">
+                app:layout_scrollFlags="scroll|enterAlways|snap|exitUntilCollapsed">
 
 
                 <ImageView
