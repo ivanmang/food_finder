@@ -60,9 +60,12 @@ class RestaurantDetailViewModel(place: Place, application: Application) : Androi
     fun insertLikedPlace(place : Place){
         viewModelScope.launch {
             try {
+                _status.value = PlaceApiStatus.LOADING
                 likedRepository.insertToDatabase(place)
+                _status.value = PlaceApiStatus.DONE
             } catch (e : Exception){
                 Log.i("Error", e.toString())
+                _status.value = PlaceApiStatus.ERROR
             }
         }
     }

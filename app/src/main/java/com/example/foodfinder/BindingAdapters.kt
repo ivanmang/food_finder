@@ -27,7 +27,8 @@ fun bindLikedRecyclerView(recyclerView: RecyclerView, data: List<Place>?) {
 fun bindImage(imgView: ImageView, imgApiCAll: String?) {
     imgApiCAll?.let {
         Glide.with(imgView.context)
-            .load(imgApiCAll)
+            .load(it)
+            .error(R.drawable.alert_circle)
             .into(imgView)
     }
 }

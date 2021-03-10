@@ -24,9 +24,6 @@ interface PlacesApiService {
     @GET("place/nearbysearch/json")
     suspend fun getNearByLocation(@Query("location") location: String, @Query("radius") radius: Int, @Query("type") type:String, @Query("key") apiKey: String) : String
 
-    @GET("place/details/json")
-    suspend fun getPlaceDetail(@Query("place_id") placeId :String, @Query("field") field : String,  @Query("key") apiKey: String) : PlaceApiResult
-
 }
 
 object PlacesApi {
