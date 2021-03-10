@@ -3,8 +3,11 @@ package com.example.foodfinder.ui.discover
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.*
 import androidx.core.app.ActivityCompat
@@ -13,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.foodfinder.BuildConfig
 import com.example.foodfinder.R
 import com.example.foodfinder.databinding.FragmentDiscoverBinding
 import com.example.foodfinder.network.model.Place
@@ -26,6 +30,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class DiscoverFragment() : Fragment(), OnMapReadyCallback {
@@ -35,6 +40,7 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
     private val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 111
     private lateinit var binding : FragmentDiscoverBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var snackbar: Snackbar? = null
 
     private val discoverViewModel: DiscoverViewModel by lazy {
         val activity = requireNotNull(this.activity) {
@@ -167,8 +173,27 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
             enableMyLocation()
             map.clear()
 
+        } else {
+            createSnackBarForPermission()
         }
         updateCamera()
+    }
+
+    private fun createSnackBarForPermission() {
+        snackbar = Snackbar.make(
+            binding.map,
+            R.string.permission_denied_explanation, Snackbar.LENGTH_INDEFINITE
+        )
+            .setAction(R.string.settings) {
+                // Displays App settings screen.
+                startActivity(Intent().apply {
+                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                })
+            }
+        snackbar!!.show()
+
     }
 
 

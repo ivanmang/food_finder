@@ -12,4 +12,6 @@
     <string name="visited">Liked</string>
     <string name="liked_restaurant">Liked restaurant</string>
     <string name="dislike_restaurant">Dislike Restaurant</string>
+    <string name="permission_denied_explanation">You need to grant location permission in order to select the location.</string>
+    <string name="settings">Setting</string>
 </resources>
