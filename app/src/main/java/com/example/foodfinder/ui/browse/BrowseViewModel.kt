@@ -36,12 +36,11 @@ class BrowseViewModel(application: Application) : ViewModel() {
     val navigateToSelectedProperty: LiveData<Place>
         get() = _navigateToSelectedProperty
     
-    fun getNearbyRestaurant(location: Location){
+    fun getUpdatedRestaurant(location: Location){
         viewModelScope.launch {
             try {
                 _status.value = PlaceApiStatus.LOADING
-                val response = PlacesApi.retrofitService.getNearByLocation(locationToString(location), 100, "restaurant", Constants.API_KEY ).results
-                restaurantRepository.insertToDatabase(response)
+                restaurantRepository.refreshPlaces(location)
                 _status.value = PlaceApiStatus.DONE
             } catch (e :Exception) {
                 Log.i("Error", e.toString())
@@ -50,9 +49,6 @@ class BrowseViewModel(application: Application) : ViewModel() {
         }
     }
 
-    private fun locationToString(location: Location) : String {
-        return location.latitude.toString() + "," + location.longitude.toString()
-    }
 
     fun displayPropertyDetails(place: Place) {
         _navigateToSelectedProperty.value = place

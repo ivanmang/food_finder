@@ -7,6 +7,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -15,13 +16,13 @@ private val moshi = Moshi.Builder()
         .build()
 
 private val retrofit = Retrofit.Builder()
-        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .addConverterFactory(ScalarsConverterFactory.create())
         .baseUrl(Constants.BASE_URL)
         .build()
 
 interface PlacesApiService {
     @GET("place/nearbysearch/json")
-    suspend fun getNearByLocation(@Query("location") location: String, @Query("radius") radius: Int, @Query("type") type:String, @Query("key") apiKey: String) : ApiResult
+    suspend fun getNearByLocation(@Query("location") location: String, @Query("radius") radius: Int, @Query("type") type:String, @Query("key") apiKey: String) : String
 
     @GET("place/details/json")
     suspend fun getPlaceDetail(@Query("place_id") placeId :String, @Query("field") field : String,  @Query("key") apiKey: String) : PlaceApiResult

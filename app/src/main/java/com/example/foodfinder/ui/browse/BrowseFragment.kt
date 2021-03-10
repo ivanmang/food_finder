@@ -6,7 +6,6 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -78,7 +77,7 @@ class BrowseFragment : Fragment() {
                 if (task.isSuccessful && task.result != null) {
                     lastLocation = task.result
                     browseViewModel.clearDatabase()
-                    browseViewModel.getNearbyRestaurant(lastLocation)
+                    browseViewModel.getUpdatedRestaurant(lastLocation)
                 }
             }
         }

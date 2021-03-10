@@ -14,5 +14,8 @@ import kotlinx.parcelize.RawValue
 data class Place(
     @PrimaryKey val place_id: String,
     val name: String,
+    val lat: Double,
+    val lng: Double,
     val vicinity: String,
+    val photoRef : String
 ) : Parcelable
