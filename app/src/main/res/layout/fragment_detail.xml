@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
-                android:text="@{viewModel.placeDetail.name}"
+                android:text="@{viewModel.selectedPlace.name}"
                 tools:text="Restaurant Name" />
 
             <TextView
@@ -67,7 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
-                android:text="@{viewModel.placeDetail.vicinity}"
+                android:text="@{viewModel.selectedPlace.vicinity}"
                 android:textAlignment="viewStart"
                 tools:text="vicinity" />
 

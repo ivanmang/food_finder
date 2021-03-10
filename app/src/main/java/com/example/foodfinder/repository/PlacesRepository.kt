@@ -31,9 +31,9 @@ private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) {
         database.deleteAll()
     }
 
-    suspend fun findPlaceByName(name : String) = withContext(ioDispatcher){
+/*    suspend fun findPlaceByI(name : String) = withContext(ioDispatcher){
         return@withContext database.getPlaceByName(name)
-    }
+    }*/
 
     private fun locationToString(location: Location) : String {
         return location.latitude.toString() + "," + location.longitude.toString()

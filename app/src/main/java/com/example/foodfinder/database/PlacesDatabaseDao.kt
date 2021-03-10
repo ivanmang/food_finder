@@ -16,8 +16,8 @@ interface PlacesDatabaseDao {
     @Query("SELECT * FROM place_table")
     fun getAllPlaces(): LiveData<List<Place>>
 
-    @Query("SELECT * FROM place_table WHERE name = :title")
-    fun getPlaceByName(title : String): Place
+    @Query("SELECT * FROM place_table WHERE place_id = :placeId")
+    fun getPlaceByPlaceId(placeId : String): LiveData<Place>
 
     @Query("DELETE FROM place_table")
     suspend fun deleteAll()

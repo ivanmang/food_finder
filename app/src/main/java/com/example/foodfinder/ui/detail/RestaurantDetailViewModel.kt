@@ -18,12 +18,12 @@ import java.lang.Exception
 
 class RestaurantDetailViewModel(place: Place, application: Application) : AndroidViewModel(application){
 
-    private val database = getLikeDatabase(application)
-    private val likedRepository = LikedRepository(database.likedDatabaseDao)
+    private val likedDatabase = getLikeDatabase(application)
+    private val likedRepository = LikedRepository(likedDatabase.likedDatabaseDao)
 
-    private val _placeDetail = MutableLiveData<PlaceDetail>()
-    val placeDetail : LiveData<PlaceDetail>
-        get() = _placeDetail
+    private val _selectedPlace = MutableLiveData<Place>()
+    val selectedPlace : LiveData<Place>
+        get() = _selectedPlace
 
     private val _photoApiLink = MutableLiveData<String>()
     val photoApiLink : LiveData<String>
@@ -37,26 +37,23 @@ class RestaurantDetailViewModel(place: Place, application: Application) : Androi
         get() = _status
 
     init {
-        getPlaceDetail(place)
+        initializePlace(place)
     }
 
-    private fun getPlaceDetail(place: Place){
+    private fun initializePlace(place: Place) {
         viewModelScope.launch {
             try {
                 _status.value = PlaceApiStatus.LOADING
-                _placeDetail.value = PlacesApi.retrofitService.getPlaceDetail(place.place_id,"name, photo, place_id, vicinity",  Constants.API_KEY).result
-                if (_placeDetail.value!!.photos.isNotEmpty()){
-                    val photoRef =  _placeDetail.value!!.photos[0].photo_reference
-                    _photoApiLink.value = buildPhotoAPI(photoRef)
-                }
-
+                _selectedPlace.value = place
+                _photoApiLink.value = buildPhotoAPI(place.photoRef)
                 _status.value = PlaceApiStatus.DONE
-            } catch (e : Exception){
+            }catch (e : Exception){
                 Log.i("Error", e.toString())
                 _status.value = PlaceApiStatus.ERROR
             }
         }
     }
+
 
     fun insertLikedPlace(place : Place){
         viewModelScope.launch {
