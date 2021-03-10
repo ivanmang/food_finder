@@ -45,7 +45,9 @@ class RestaurantDetailViewModel(place: Place, application: Application) : Androi
             try {
                 _status.value = PlaceApiStatus.LOADING
                 _selectedPlace.value = place
-                _photoApiLink.value = buildPhotoAPI(place.photoRef)
+                if (place.photoRef.isNotEmpty()){
+                    _photoApiLink.value = buildPhotoAPI(place.photoRef)
+                }
                 _status.value = PlaceApiStatus.DONE
             }catch (e : Exception){
                 Log.i("Error", e.toString())

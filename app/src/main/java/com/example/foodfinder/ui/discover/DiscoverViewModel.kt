@@ -22,20 +22,7 @@ class DiscoverViewModel(application: Application) : ViewModel() {
     private val database = getDatabase(application)
     private val restaurantRepository = PlacesRepository(database.placesDatabaseDao)
 
-    private val _restaurantDetail = MutableLiveData<PlaceDetail>()
-
-    val restaurantDetail : LiveData<PlaceDetail>
-        get() = _restaurantDetail
-
-    private val _restaurantPlace = MutableLiveData<Place>()
-
-    val restaurantPlace : LiveData<Place>
-        get() = _restaurantPlace
-
-    private val _lastLocation = MutableLiveData<Location>()
-
-    val lastLocation : LiveData<Location>
-        get() = _lastLocation
+    val mapRestaurantList : LiveData<List<Place>> = database.placesDatabaseDao.getAllPlaces()
 
     // The internal MutableLiveData that stores the status of the most recent request
     private val _status = MutableLiveData<PlaceApiStatus>()
@@ -44,61 +31,32 @@ class DiscoverViewModel(application: Application) : ViewModel() {
     val status: LiveData<PlaceApiStatus>
         get() = _status
 
-    val restaurantList : LiveData<List<Place>> = database.placesDatabaseDao.getAllPlaces()
+
+
 
     fun getNearbyRestaurant(location: Location){
         viewModelScope.launch {
-            _status.value = PlaceApiStatus.LOADING
+            try {
+                _status.value = PlaceApiStatus.LOADING
+                restaurantRepository.refreshPlaces(location)
+                _status.value = PlaceApiStatus.DONE
+            } catch (e :Exception) {
+                _status.value = PlaceApiStatus.ERROR
+                Log.i("Error", e.toString())
+            }
+        }
+    }
+
+
+    fun clearDatabase(){
+        viewModelScope.launch {
             try {
                 restaurantRepository.clearDatabase()
-                val response = PlacesApi.retrofitService.getNearByLocation(locationToString(location), 100, "restaurant", Constants.API_KEY ).results
-                restaurantRepository.insertToDatabase(response)
-                _status.value = PlaceApiStatus.DONE
-                Log.i("value", response.toString())
-            } catch (e :Exception) {
-                _status.value = PlaceApiStatus.ERROR
-                Log.i("Error", e.toString())
-            }
-        }
-    }
-
-    private fun locationToString(location: Location) : String {
-        return location.latitude.toString() + "," + location.longitude.toString()
-    }
-
-    fun getNearByRestaurantDetail(place: Place?) {
-        viewModelScope.launch {
-            _status.value = PlaceApiStatus.LOADING
-            try {
-                _restaurantDetail.value = PlacesApi.retrofitService.getPlaceDetail(place!!.place_id, "name, photo, place_id, vicinity", Constants.API_KEY).result
-                _status.value = PlaceApiStatus.DONE
-                //Log.i("value", response.toString())
-            } catch (e :Exception) {
-                _status.value = PlaceApiStatus.ERROR
-                Log.i("Error", e.toString())
-            }
-        }
-    }
-
-    fun getPlaceFromName(title: String?){
-        viewModelScope.launch {
-            _status.value = PlaceApiStatus.LOADING
-            try {
-                if (title != null) {
-                    _restaurantPlace.value = restaurantRepository.findPlaceByName(title)
-                    Log.i("Name", title)
-                    _status.value = PlaceApiStatus.DONE
-                }
             } catch (e : Exception){
-                _status.value = PlaceApiStatus.ERROR
                 Log.i("Error", e.toString())
             }
         }
-
     }
 
-    fun setLastLocation(lastLocation : Location){
-        _lastLocation.value = lastLocation
-    }
 
 }

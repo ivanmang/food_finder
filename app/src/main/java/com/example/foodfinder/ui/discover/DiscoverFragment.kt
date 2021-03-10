@@ -15,6 +15,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.foodfinder.R
 import com.example.foodfinder.databinding.FragmentDiscoverBinding
+import com.example.foodfinder.network.model.Place
+import com.example.foodfinder.ui.browse.BrowseViewModel
+import com.example.foodfinder.ui.browse.BrowseViewModelFactory
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -26,13 +30,19 @@ import java.util.*
 
 class DiscoverFragment() : Fragment(), OnMapReadyCallback {
 
-    private lateinit var discoverViewModel: DiscoverViewModel
     private lateinit var map: GoogleMap
     private val ZOOM_LEVEL = 18f
     private val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 111
-    private var lat : Double = 0.0
-    private var long : Double = 0.0
     private lateinit var binding : FragmentDiscoverBinding
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    private val discoverViewModel: DiscoverViewModel by lazy {
+        val activity = requireNotNull(this.activity) {
+            "You can only access the viewModel after onViewCreated()"
+        }
+        ViewModelProvider(this, DiscoverViewModelFactory(activity.application )).get(DiscoverViewModel::class.java)
+
+    }
 
 
     override fun onCreateView(
@@ -40,12 +50,12 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        discoverViewModel =
-                ViewModelProvider(this, DiscoverViewModelFactory( requireActivity().application )).get(DiscoverViewModel::class.java)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_discover, container, false)
+        binding.viewModel = discoverViewModel
         binding.lifecycleOwner = this
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        addMarkerToNearByRestaurant()
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -60,7 +70,9 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
      * overflow menu.
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        addMarkerToNearByRestaurant()
+        updateCamera()
+        updateNearByRestaurant()
+        map.clear()
         return true
     }
 
@@ -72,27 +84,21 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun updateCamera() {
-        val locationProvider = LocationServices.getFusedLocationProviderClient(activity as Activity)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity as Activity)
         if (isForegroundLocationGranted()) {
-            val locationResult = locationProvider.lastLocation
+            val locationResult = fusedLocationClient.lastLocation
             locationResult.addOnCompleteListener { task ->
                 if (task.isSuccessful && task.result != null) {
-                    discoverViewModel.setLastLocation(task.result!!)
-                    discoverViewModel.lastLocation.value?.let { it1 ->
-                        discoverViewModel.getNearbyRestaurant(
-                            it1
-                        )
-                    }
-                    map.clear()
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(discoverViewModel.lastLocation.value!!.latitude, discoverViewModel.lastLocation.value!!.longitude), ZOOM_LEVEL))
+                    val result = task.result
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(result.latitude, result.longitude), ZOOM_LEVEL))
                 } else {
                     val defaultLocation = LatLng(37.422160, -122.084270)
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, ZOOM_LEVEL))
                 }
             }
-        } else {
+        } /*else {
             enableMyLocation()
-        }
+        }*/
     }
 
     private fun isForegroundLocationGranted(): Boolean {
@@ -101,33 +107,38 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
                         Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
-    private fun addMarkerToNearByRestaurant(){
-        discoverViewModel.restaurantList.observe(viewLifecycleOwner, Observer { places ->
-            for (place in places){
-                discoverViewModel.getNearByRestaurantDetail(place)
-            }
-        })
-
-        discoverViewModel.restaurantDetail.observe(viewLifecycleOwner, Observer { it ->
-            lat = it.geometry.location.lat.toDouble()
-            long = it.geometry.location.lng.toDouble()
-            map.addMarker(MarkerOptions().title(it.name).position(LatLng(lat, long)))
-        })
-        map.setOnMarkerClickListener(GoogleMap.OnMarkerClickListener {
-            marker ->
-            marker.showInfoWindow()
-            discoverViewModel.getPlaceFromName(marker.title)
-            return@OnMarkerClickListener true
-        })
-        map.setOnInfoWindowClickListener { info ->
-
-            discoverViewModel.restaurantPlace.observe(viewLifecycleOwner, Observer {
-                if (null != it){
-                    this.findNavController().navigate(DiscoverFragmentDirections.actionNavigationHomeToRestaurantDetailFragment(it))
+    @SuppressLint("MissingPermission")
+    private fun updateNearByRestaurant(){
+        discoverViewModel.clearDatabase()
+        val locationResult = fusedLocationClient.lastLocation
+        locationResult.addOnCompleteListener { task ->
+            if (task.isSuccessful && task.result != null) {
+                val result = task.result
+                discoverViewModel.getNearbyRestaurant(result)
                 }
-            })
         }
     }
+
+    private fun addMarkerToNearByRestaurant(){
+        discoverViewModel.mapRestaurantList.observe(viewLifecycleOwner, Observer {
+            for (place in it) {
+                val newMarker = map.addMarker(MarkerOptions().title(place.name).position(LatLng(place.lat, place.lng)))
+                newMarker.tag = place
+            }
+
+            map.setOnMarkerClickListener(GoogleMap.OnMarkerClickListener {
+                    marker ->
+                marker.showInfoWindow()
+                return@OnMarkerClickListener true
+            })
+            map.setOnInfoWindowClickListener { info ->
+                this.findNavController().navigate(DiscoverFragmentDirections.actionNavigationHomeToRestaurantDetailFragment(
+                    info.tag as Place
+                ))
+            }
+        })
+    }
+
 
 
     @SuppressLint("MissingPermission")
