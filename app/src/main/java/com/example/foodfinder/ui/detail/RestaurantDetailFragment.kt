@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.foodfinder.databinding.FragmentDetailBinding
 import com.example.foodfinder.ui.discover.DiscoverViewModel
+import com.google.android.material.appbar.AppBarLayout
 
 class RestaurantDetailFragment : Fragment() {
 
@@ -29,6 +30,13 @@ class RestaurantDetailFragment : Fragment() {
             restaurantDetailViewModel.insertLikedPlace(place)
             this.findNavController().navigate(RestaurantDetailFragmentDirections.actionRestaurantDetailFragmentToNavigationVisited())
         }
+
+        val listener = AppBarLayout.OnOffsetChangedListener { unused, verticalOffset ->
+            val seekPosition = -verticalOffset / binding.appbarLayout.totalScrollRange.toFloat()
+            binding.motionLayout.progress = seekPosition
+        }
+
+        binding.appbarLayout.addOnOffsetChangedListener(listener)
 
         return binding.root
     }
