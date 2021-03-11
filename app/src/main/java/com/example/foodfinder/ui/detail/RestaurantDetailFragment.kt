@@ -1,5 +1,6 @@
 package com.example.foodfinder.ui.detail
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -57,7 +58,22 @@ class RestaurantDetailFragment : Fragment() {
      * overflow menu.
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "Hey! Let's grab some food in " + intentMessageBuilder())
+            type = "text/plain"
+        }
 
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
         return true
+    }
+
+    private fun intentMessageBuilder() : String{
+        val place = restaurantDetailViewModel.selectedPlace.value
+        if (place != null){
+            return place.name + " at " + place.vicinity
+        }
+        return ""
     }
 }
