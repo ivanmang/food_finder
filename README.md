@@ -3,6 +3,24 @@ A project for Udacity's Android Kotlin Developer Nanodegree course
 # Overview
 It might be a daily struggle for many people to find a restaurant nearby. So, I built an app which shows restaurants within 100m. The nearby restaurants can be displayed via Google map or a list. Users are able to explore different restaurants
 and saved it to the app if they liked that restaurant. They are able to share the name and address of that restaurant to friends too.
+
+# Features
+- Accees user's current location and find the restaurants nearby using the Google Place Api
+- Display the detail of the restaurant inclufing pictures and vicinty
+  - Able to like and save the selected restaurant
+  - Able to share this restaurants via text
+
+# Milestone delivery targets
+#### Milestone 1
+Build a single page app that can display all the restaurant nearby
+#### Milestone 2
+Able to display the restaurnat nearby in google map
+#### Milestone 3
+Able to selecte a restaurant and show its detail including images and share its name to friends
+#### Milestone 4
+Able to save the restaurants that are "liked" and display it on another page
+
+
 # Instruction
 
 
