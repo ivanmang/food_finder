@@ -16,4 +16,5 @@
     <string name="settings">Setting</string>
     <string name="remove">Remove</string>
     <string name="clear">Clear</string>
+    <string name="statusImg">Image displayed that error occur</string>
 </resources>

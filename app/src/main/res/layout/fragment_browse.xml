@@ -13,6 +13,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.browse.BrowseFragment">
 
+    <ImageView
+        android:id="@+id/status_image"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:contentDescription="@string/statusImg"
+        app:imgApiStatus="@{viewModel.status}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/restaurant_list"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/restaurant_list"
         android:layout_width="match_parent"

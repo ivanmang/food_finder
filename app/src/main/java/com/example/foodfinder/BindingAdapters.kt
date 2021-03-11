@@ -28,7 +28,7 @@ fun bindImage(imgView: ImageView, imgApiCAll: String?) {
     imgApiCAll?.let {
         Glide.with(imgView.context)
             .load(it)
-            .error(R.drawable.alert_circle)
+            .error(R.drawable.ic_broken_image)
             .into(imgView)
     }
 }
@@ -41,6 +41,25 @@ fun bindStatus(progressBar: ProgressBar, status: PlaceApiStatus?) {
         }
         PlaceApiStatus.DONE -> {
             progressBar.visibility = View.GONE
+        }
+        PlaceApiStatus.ERROR -> {
+            progressBar.visibility = View.GONE
+        }
+    }
+}
+
+@BindingAdapter("imgApiStatus")
+fun bindImgStatus(imgView: ImageView,status: PlaceApiStatus?){
+    when (status) {
+        PlaceApiStatus.LOADING -> {
+            imgView.visibility = View.GONE
+        }
+        PlaceApiStatus.ERROR -> {
+            imgView.visibility = View.VISIBLE
+            imgView.setImageResource(R.drawable.ic_connection_error)
+        }
+        PlaceApiStatus.DONE -> {
+            imgView.visibility = View.GONE
         }
     }
 }

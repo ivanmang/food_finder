@@ -33,8 +33,8 @@ class DiscoverViewModel(application: Application) : ViewModel() {
 
     fun getNearbyRestaurant(location: Location){
         viewModelScope.launch {
+            _status.value = PlaceApiStatus.LOADING
             try {
-                _status.value = PlaceApiStatus.LOADING
                 restaurantRepository.refreshPlaces(location)
                 _status.value = PlaceApiStatus.DONE
             } catch (e :Exception) {
