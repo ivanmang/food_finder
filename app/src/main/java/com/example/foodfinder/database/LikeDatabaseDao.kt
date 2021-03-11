@@ -10,9 +10,6 @@ interface LikedDatabaseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(place: Place)
 
-    @Update
-    suspend fun update(place : Place)
-
     @Query("SELECT * FROM place_table")
     fun getAllPlaces(): LiveData<List<Place>>
 

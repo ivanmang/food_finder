@@ -5,17 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.foodfinder.databinding.LikeViewItemBinding
-import com.example.foodfinder.network.model.Place
 import com.example.foodfinder.databinding.RestaurantViewItemBinding
+import com.example.foodfinder.network.model.Place
 
 class LikedRestaurantListAdapter() : ListAdapter<Place, LikedRestaurantListAdapter.PlaceViewHolder>(DiffCallback) {
 
-    class PlaceViewHolder(private var binding : LikeViewItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class PlaceViewHolder(private var binding : RestaurantViewItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(place : Place){
             binding.place = place
             binding.executePendingBindings()
-
         }
     }
 
@@ -32,7 +30,7 @@ class LikedRestaurantListAdapter() : ListAdapter<Place, LikedRestaurantListAdapt
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {
-        return PlaceViewHolder(LikeViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return PlaceViewHolder(RestaurantViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {

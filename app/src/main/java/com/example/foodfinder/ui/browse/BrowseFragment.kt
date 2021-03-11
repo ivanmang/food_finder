@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.foodfinder.R
 import com.example.foodfinder.databinding.FragmentBrowseBinding
+import com.example.foodfinder.ui.discover.PlaceApiStatus
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
@@ -81,6 +83,13 @@ class BrowseFragment : Fragment() {
                 }
             }
         }
+        browseViewModel.status.observe(viewLifecycleOwner, Observer {
+            if (it == PlaceApiStatus.DONE){
+                Toast.makeText(context, "Refresh Complete", Toast.LENGTH_LONG).show()
+            } else if (it == PlaceApiStatus.ERROR){
+                Toast.makeText(context, "Error Occur", Toast.LENGTH_LONG).show()
+            }
+        })
         return true
     }
 

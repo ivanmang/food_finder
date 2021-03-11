@@ -1,9 +1,9 @@
 package com.example.foodfinder.ui.liked_restaurant
 
+import android.app.Activity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -12,6 +12,8 @@ import com.example.foodfinder.databinding.FragmentDiscoverBinding
 import com.example.foodfinder.databinding.FragmentVisitedBinding
 import com.example.foodfinder.ui.discover.DiscoverViewModel
 import com.example.foodfinder.ui.discover.DiscoverViewModelFactory
+import com.example.foodfinder.ui.discover.PlaceApiStatus
+import com.google.android.gms.location.LocationServices
 
 class LikedFragment : Fragment() {
 
@@ -31,7 +33,17 @@ class LikedFragment : Fragment() {
         binding.viewModel = likedViewModel
         binding.likedRestaurantList.adapter = LikedRestaurantListAdapter()
 
-
+        setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.clear_liked_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        likedViewModel.clearDatabase()
+        return true
     }
 }

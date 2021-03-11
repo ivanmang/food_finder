@@ -17,5 +17,4 @@ class LikedRepository(private val database: LikedDatabaseDao,
         database.deleteAll()
     }
 
-
 }

@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -79,6 +80,13 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
         updateCamera()
         updateNearByRestaurant()
         map.clear()
+        discoverViewModel.status.observe(viewLifecycleOwner, Observer {
+            if (it == PlaceApiStatus.DONE){
+                Toast.makeText(context, "Refresh Complete", Toast.LENGTH_LONG).show()
+            } else if (it == PlaceApiStatus.ERROR){
+                Toast.makeText(context, "Error Occur", Toast.LENGTH_LONG).show()
+            }
+        })
         return true
     }
 
@@ -102,9 +110,7 @@ class DiscoverFragment() : Fragment(), OnMapReadyCallback {
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, ZOOM_LEVEL))
                 }
             }
-        } /*else {
-            enableMyLocation()
-        }*/
+        }
     }
 
     private fun isForegroundLocationGranted(): Boolean {

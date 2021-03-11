@@ -8,9 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.foodfinder.Constants
 import com.example.foodfinder.network.model.Place
-import com.example.foodfinder.network.model.PlaceDetail
 import com.example.foodfinder.database.getLikeDatabase
-import com.example.foodfinder.network.PlacesApi
 import com.example.foodfinder.repository.LikedRepository
 import com.example.foodfinder.ui.discover.PlaceApiStatus
 import kotlinx.coroutines.launch
