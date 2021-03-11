@@ -10,7 +10,7 @@ and saved it to the app if they liked that restaurant. They are able to share th
   - Able to like and save the selected restaurant
   - Able to share this restaurants via text
 
-# Milestone delivery targets
+# Milestone delivery targets (Each milestone took about a week)
 #### Milestone 1
 Build a single page app that can display all the restaurant nearby
 #### Milestone 2
@@ -22,8 +22,12 @@ Able to save the restaurants that are "liked" and display it on another page
 
 
 # Instruction
+Once you enter the discover page (google map) and allow the app you access your location, press the refresh button on the tool bar. The restaurants nearby will be shown on the map. You can press the marker for more details
+<img src="https://user-images.githubusercontent.com/35868876/110740931-ca7af000-826e-11eb-9ec6-73dc1bde8d4b.gif" alt="Discover gif" width="300"/>
 
+For the browse page, press the refresh button to obtain restaurants nearby and click into the restaurants interested. You can share the name and address of the restaurants to your friends via share button. Also, you can like and save this restaurant for the future.
 
+<img src="https://user-images.githubusercontent.com/35868876/110742782-eb911000-8271-11eb-8772-534412c16140.gif" alt="Browse gif" width="300"/>
 
 # App structure
 - Discover
@@ -55,6 +59,7 @@ Able to save the restaurants that are "liked" and display it on another page
 
 ## Android system and hardware integration
 #### Architect application functionality using MVVM.
+
 
 #### Implement logic to handle and respond to hardware and system events that impact the Android Lifecycle.
 
