@@ -22,36 +22,42 @@ import com.google.android.gms.location.LocationServices
 
 class BrowseFragment : Fragment() {
 
-    private lateinit var binding : FragmentBrowseBinding
+    private lateinit var binding: FragmentBrowseBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var lastLocation : Location
+    private lateinit var lastLocation: Location
 
     private val browseViewModel: BrowseViewModel by lazy {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onViewCreated()"
         }
-        ViewModelProvider(this, BrowseViewModelFactory(activity.application)).get(BrowseViewModel::class.java)
+        ViewModelProvider(
+            this,
+            BrowseViewModelFactory(activity.application)
+        ).get(BrowseViewModel::class.java)
 
     }
 
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_browse, container, false)
         binding.viewModel = browseViewModel
         binding.lifecycleOwner = this
 
-        binding.restaurantList.adapter = RestaurantListAdapter(RestaurantListAdapter.OnClickListener {
-            browseViewModel.displayPropertyDetails(it)
-        })
+        binding.restaurantList.adapter =
+            RestaurantListAdapter(RestaurantListAdapter.OnClickListener {
+                browseViewModel.displayPropertyDetails(it)
+            })
 
         browseViewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
-            if ( null != it ) {
+            if (null != it) {
                 // Must find the NavController from the Fragment
-                this.findNavController().navigate( BrowseFragmentDirections.actionNavigationBrowseToRestaurantDetailFragment(it))
+                this.findNavController().navigate(
+                    BrowseFragmentDirections.actionNavigationBrowseToRestaurantDetailFragment(it)
+                )
                 // Tell the ViewModel we've made the navigate call to prevent multiple navigation
                 browseViewModel.displayPropertyDetailsComplete()
             }
@@ -84,9 +90,9 @@ class BrowseFragment : Fragment() {
             }
         }
         browseViewModel.status.observe(viewLifecycleOwner, Observer {
-            if (it == PlaceApiStatus.DONE){
+            if (it == PlaceApiStatus.DONE) {
                 Toast.makeText(context, "Refresh Complete", Toast.LENGTH_LONG).show()
-            } else if (it == PlaceApiStatus.ERROR){
+            } else if (it == PlaceApiStatus.ERROR) {
                 Toast.makeText(context, "Error Occur", Toast.LENGTH_LONG).show()
             }
         })
@@ -94,10 +100,11 @@ class BrowseFragment : Fragment() {
     }
 
 
-
     private fun isForegroundLocationGranted(): Boolean {
         return PackageManager.PERMISSION_GRANTED ==
-                ActivityCompat.checkSelfPermission(requireContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION)
+                ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
     }
 }
