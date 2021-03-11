@@ -10,7 +10,8 @@ and saved it to the app if they liked that restaurant. They are able to share th
   - Able to like and save the selected restaurant
   - Able to share this restaurants via text
 
-# Milestone delivery targets (Each milestone took about a week)
+# Milestone delivery targets 
+(Each milestone took about a week)
 #### Milestone 1
 Build a single page app that can display all the restaurant nearby
 #### Milestone 2
@@ -19,6 +20,9 @@ Able to display the restaurnat nearby in google map
 Able to selecte a restaurant and show its detail including images and share its name to friends
 #### Milestone 4
 Able to save the restaurants that are "liked" and display it on another page
+
+## Expectations
+A app which can show the restaurants neaby in both a map and list form and users can store the restaurants they loved.
 
 
 # Instruction
