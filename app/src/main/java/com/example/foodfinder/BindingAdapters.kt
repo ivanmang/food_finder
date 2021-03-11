@@ -6,6 +6,7 @@ import android.widget.ProgressBar
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.foodfinder.network.model.Place
 import com.example.foodfinder.ui.browse.RestaurantListAdapter
 import com.example.foodfinder.ui.discover.PlaceApiStatus
@@ -28,7 +29,10 @@ fun bindImage(imgView: ImageView, imgApiCAll: String?) {
     imgApiCAll?.let {
         Glide.with(imgView.context)
             .load(it)
-            .error(R.drawable.ic_broken_image)
+            .apply(
+                RequestOptions()
+                .placeholder(R.drawable.loading_animation)
+                .error(R.drawable.ic_broken_image))
             .into(imgView)
     }
 }
