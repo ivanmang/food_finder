@@ -13,6 +13,8 @@
         <action
             android:id="@+id/action_navigation_home_to_restaurantDetailFragment"
             app:destination="@id/restaurantDetailFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
             app:popUpTo="@id/navigation_discover"
             app:popUpToInclusive="false" />
     </fragment>
@@ -26,6 +28,8 @@
         <action
             android:id="@+id/action_navigation_browse_to_restaurantDetailFragment"
             app:destination="@id/restaurantDetailFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
             app:launchSingleTop="false"
             app:popUpTo="@id/navigation_browse"
             app:popUpToInclusive="false" />
@@ -46,6 +50,8 @@
         <action
             android:id="@+id/action_restaurantDetailFragment_to_navigation_visited"
             app:destination="@id/navigation_visited"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
             app:popUpTo="@id/navigation_browse" />
     </fragment>
     <activity
